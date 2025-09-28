@@ -14,6 +14,9 @@ const core = require('@actions/core');
 import _ from 'lodash';
 import { getSessionFromDB, initDB, saveSessionToDB, updateSessionToDB } from './sqlite';
 
+// 设置Node.js兼容性
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 
