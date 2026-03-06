@@ -64,6 +64,8 @@ export const BARK_KEY_DEFAULT = process.env.BARK_KEY || '';
  * STRAVA ACCOUNT
  */
 export const STRAVA_ACCESS_TOKEN_DEFAULT = process.env.STRAVA_ACCESS_TOKEN || '';
+export const STRAVA_REFRESH_TOKEN_DEFAULT = process.env.STRAVA_REFRESH_TOKEN || '';
+export const STRAVA_TOKEN_EXPIRES_AT_DEFAULT = parseInt(process.env.STRAVA_TOKEN_EXPIRES_AT || '0');
 export const STRAVA_CLIENT_ID_DEFAULT = process.env.STRAVA_CLIENT_ID || '';
 export const STRAVA_CLIENT_SECRET_DEFAULT = process.env.STRAVA_CLIENT_SECRET || '';
 export const STRAVA_REDIRECT_URI_DEFAULT = process.env.STRAVA_REDIRECT_URI || 'http://localhost';

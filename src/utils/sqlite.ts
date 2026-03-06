@@ -15,6 +15,12 @@ export const initDB = async () => {
             region VARCHAR(20),
             session  TEXT
         )`);
+    await db.exec(`CREATE TABLE IF NOT EXISTS strava_token (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            access_token TEXT,
+            refresh_token TEXT,
+            expires_at INTEGER
+        )`);
 };
 
 export const getDB = async () => {
@@ -56,6 +62,24 @@ export const getSessionFromDB = async (type: 'CN' | 'GLOBAL'): Promise<Record<st
     const encryptedSessionStr = queryResult?.session;
     // return {}
     return decryptSession(encryptedSessionStr);
+};
+
+export const getStravaTokenFromDB = async (): Promise<{ access_token: string; refresh_token: string; expires_at: number } | undefined> => {
+    const db = await getDB();
+    const row = await db.get('SELECT access_token, refresh_token, expires_at FROM strava_token ORDER BY id DESC LIMIT 1');
+    return row || undefined;
+};
+
+export const saveStravaTokenToDB = async (accessToken: string, refreshToken: string, expiresAt: number) => {
+    const db = await getDB();
+    const existing = await db.get('SELECT id FROM strava_token LIMIT 1');
+    if (existing) {
+        await db.run('UPDATE strava_token SET access_token = ?, refresh_token = ?, expires_at = ? WHERE id = ?',
+            accessToken, refreshToken, expiresAt, existing.id);
+    } else {
+        await db.run('INSERT INTO strava_token (access_token, refresh_token, expires_at) VALUES (?, ?, ?)',
+            accessToken, refreshToken, expiresAt);
+    }
 };
 
 export const encryptSession = (session: Record<string, any>): string => {
